@@ -1,0 +1,615 @@
+[
+  {
+    "gid": "346832350",
+    "status": 200,
+    "usable": false,
+    "firstCells": "TAB|UPDATED|STATUS|NEWS"
+  },
+  {
+    "gid": "1439671777",
+    "status": 200,
+    "usable": false,
+    "firstCells": "Pantheon 2.0||||"
+  },
+  {
+    "gid": "1062099834",
+    "status": 200,
+    "usable": false,
+    "firstCells": "Role|🖼️|Name|Source|#|Priority"
+  },
+  {
+    "gid": "1301036036",
+    "status": 200,
+    "usable": false,
+    "firstCells": "ARCHETYPE|||||"
+  },
+  {
+    "gid": "107452313",
+    "status": 200,
+    "usable": false,
+    "firstCells": "ARCHETYPE|||||INFO"
+  },
+  {
+    "gid": "1890042119",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 62,
+    "tiers": {
+      "S": 10,
+      "A": 12,
+      "B": 10,
+      "C": 12,
+      "D": 13,
+      "E": 5
+    },
+    "sample": [
+      "No Hesitation=S",
+      "Cusp Sempiternal=S",
+      "DECATUR 02=S"
+    ]
+  },
+  {
+    "gid": "324500912",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 28,
+    "tiers": {
+      "S": 4,
+      "A": 7,
+      "B": 5,
+      "C": 7,
+      "D": 5
+    },
+    "sample": [
+      "Biting Winds=S",
+      "The Spiteful Fang=S",
+      "Point of the Stag=S"
+    ]
+  },
+  {
+    "gid": "1315046624",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 68,
+    "tiers": {
+      "S": 9,
+      "A": 12,
+      "B": 15,
+      "C": 17,
+      "D": 7,
+      "E": 8
+    },
+    "sample": [
+      "Kindled Orchid=S",
+      "IRONWOOD 03=S",
+      "Word of Crota=S"
+    ]
+  },
+  {
+    "gid": "1712537582",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 59,
+    "tiers": {
+      "S": 9,
+      "A": 21,
+      "B": 9,
+      "C": 9,
+      "D": 11
+    },
+    "sample": [
+      "Joxer's Longsword=S",
+      "Claws of the Wolf=S",
+      "The Martlet=S"
+    ]
+  },
+  {
+    "gid": "946843299",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 48,
+    "tiers": {
+      "S": 5,
+      "A": 9,
+      "B": 15,
+      "C": 9,
+      "D": 5,
+      "E": 5
+    },
+    "sample": [
+      "Vouchsafe=S",
+      "Voltaic Shade=S",
+      "Unworthy=S"
+    ]
+  },
+  {
+    "gid": "1594008157",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 38,
+    "tiers": {
+      "S": 8,
+      "A": 5,
+      "B": 10,
+      "C": 14,
+      "D": 1
+    },
+    "sample": [
+      "Compact Defender=S",
+      "Brass Attacks=S",
+      "Seventh Seraph SI-2=S"
+    ]
+  },
+  {
+    "gid": "1405969509",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 53,
+    "tiers": {
+      "S": 8,
+      "A": 19,
+      "B": 11,
+      "C": 5,
+      "D": 10
+    },
+    "sample": [
+      "Unforgiven=S",
+      "Multimach CCX=S",
+      "The Recluse=S"
+    ]
+  },
+  {
+    "gid": "657764751",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 34,
+    "tiers": {
+      "S": 5,
+      "A": 7,
+      "B": 12,
+      "C": 7,
+      "D": 3
+    },
+    "sample": [
+      "VS Velocity Baton=S",
+      "Ouster Engine=S",
+      "Gizmo Weft=S"
+    ]
+  },
+  {
+    "gid": "1318165198",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 43,
+    "tiers": {
+      "S": 3,
+      "A": 7,
+      "B": 10,
+      "C": 12,
+      "D": 6,
+      "E": 5
+    },
+    "sample": [
+      "The Wizened Rebuke=S",
+      "Glacioclasm=S",
+      "Loaded Question=S"
+    ]
+  },
+  {
+    "gid": "1239299765",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 18,
+    "rows": 14,
+    "tiers": {
+      "S": 5,
+      "A": 6,
+      "B": 3
+    },
+    "sample": [
+      "Ecliptic Distaff=S",
+      "The Heron=S",
+      "Forthcoming Deviance=S"
+    ]
+  },
+  {
+    "gid": "1595979957",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 60,
+    "tiers": {
+      "S": 5,
+      "A": 11,
+      "B": 11,
+      "C": 13,
+      "D": 12,
+      "E": 6,
+      "F": 2
+    },
+    "sample": [
+      "Threat Level=S",
+      "Found Verdict=S",
+      "Perfect Paradox=S"
+    ]
+  },
+  {
+    "gid": "1090554564",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 57,
+    "tiers": {
+      "S": 4,
+      "A": 10,
+      "B": 7,
+      "C": 13,
+      "D": 10,
+      "E": 9,
+      "F": 4
+    },
+    "sample": [
+      "Conspiracy Honed=S",
+      "Something Something=S",
+      "Praedyth's Revenge=S"
+    ]
+  },
+  {
+    "gid": "550485113",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 8,
+    "tiers": {
+      "S": 4,
+      "A": 4
+    },
+    "sample": [
+      "Lotus-Eater=S",
+      "High Albedo=S",
+      "Returned Memory=S"
+    ]
+  },
+  {
+    "gid": "288998351",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 16,
+    "rows": 12,
+    "tiers": {
+      "S": 2,
+      "A": 5,
+      "B": 2,
+      "C": 3
+    },
+    "sample": [
+      "Chronophage=S",
+      "Unsworn=S",
+      "Hollow Denial=A"
+    ]
+  },
+  {
+    "gid": "439751986",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 26,
+    "tiers": {
+      "S": 5,
+      "A": 7,
+      "B": 5,
+      "C": 5,
+      "D": 4
+    },
+    "sample": [
+      "Edge Transit=S",
+      "VS Chill Inhibitor=S",
+      "The Ever-Present=S"
+    ]
+  },
+  {
+    "gid": "29008106",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 19,
+    "tiers": {
+      "S": 2,
+      "A": 3,
+      "B": 5,
+      "C": 4,
+      "D": 3,
+      "E": 2
+    },
+    "sample": [
+      "Eyes Unveiled=S",
+      "Cataclysmic=S",
+      "Reed's Regret=A"
+    ]
+  },
+  {
+    "gid": "1919916707",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 36,
+    "tiers": {
+      "S": 11,
+      "A": 9,
+      "B": 8,
+      "C": 4,
+      "D": 4
+    },
+    "sample": [
+      "Corrective Measure=S",
+      "Hammerhead=S",
+      "Song of Ir Yût=S"
+    ]
+  },
+  {
+    "gid": "981030684",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 34,
+    "tiers": {
+      "S": 1,
+      "A": 9,
+      "B": 7,
+      "C": 10,
+      "D": 6,
+      "E": 1
+    },
+    "sample": [
+      "Hezen Vengeance=S",
+      "Bellowing Giant=A",
+      "Apex Predator=A"
+    ]
+  },
+  {
+    "gid": "473850359",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 18,
+    "rows": 41,
+    "tiers": {
+      "S": 7,
+      "A": 12,
+      "B": 7,
+      "C": 5,
+      "D": 6,
+      "E": 3,
+      "F": 1
+    },
+    "sample": [
+      "Sullen Claw=S",
+      "Chivalric Fire=S",
+      "Falling Guillotine=S"
+    ]
+  },
+  {
+    "gid": "266663572",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 17,
+    "rows": 8,
+    "tiers": {
+      "S": 4,
+      "A": 1,
+      "B": 2,
+      "C": 1
+    },
+    "sample": [
+      "Refurbished A499=S",
+      "Veillantif-D=S",
+      "Mint Retrograde=S"
+    ]
+  },
+  {
+    "gid": "1789798057",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 2,
+    "tierCol": 14,
+    "rows": 141,
+    "tiers": {
+      "S": 1,
+      "A": 7,
+      "B": 8,
+      "C": 11,
+      "D": 23,
+      "E": 43,
+      "F": 48
+    },
+    "sample": [
+      "Tractor Cannon=S",
+      "Choir of One=A",
+      "Dead Messenger=A"
+    ]
+  },
+  {
+    "gid": "1087089423",
+    "status": 200,
+    "usable": true,
+    "headerRow": 0,
+    "nameCol": 1,
+    "tierCol": 10,
+    "rows": 123,
+    "tiers": {},
+    "sample": [
+      "Aeon Swift=",
+      "Assassin's Cowl=",
+      "Athrys's Embrace="
+    ]
+  },
+  {
+    "gid": "1756859209",
+    "status": 200,
+    "usable": false,
+    "firstCells": "#|ICON|CLASS|SUBCLASS|ASPECTS|"
+  },
+  {
+    "gid": "1589555995",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 10,
+    "rows": 228,
+    "tiers": {
+      "S": 9,
+      "A": 21,
+      "B": 28,
+      "C": 21,
+      "D": 46,
+      "E": 80,
+      "F": 23
+    },
+    "sample": [
+      "Eager Edge=S",
+      "Attrition Orbs=S",
+      "Aggregate Charge=S"
+    ]
+  },
+  {
+    "gid": "655418239",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 9,
+    "rows": 82,
+    "tiers": {
+      "S": 13,
+      "A": 17,
+      "B": 13,
+      "C": 15,
+      "D": 12,
+      "E": 7,
+      "F": 5
+    },
+    "sample": [
+      "Timelost Magazine=S",
+      "Forge's Kin=S",
+      "Accelerated Assault=S"
+    ]
+  },
+  {
+    "gid": "1665223292",
+    "status": 200,
+    "usable": false,
+    "firstCells": "INFO|||||"
+  },
+  {
+    "gid": "67326797",
+    "status": 200,
+    "usable": false,
+    "firstCells": "INFO|||||"
+  },
+  {
+    "gid": "1402770816",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 9,
+    "rows": 99,
+    "tiers": {
+      "S": 6,
+      "A": 9,
+      "B": 23,
+      "C": 27,
+      "D": 25,
+      "F": 9
+    },
+    "sample": [
+      "Facet of Purpose=S",
+      "Echo of Starvation=S",
+      "Spark of Resistance=S"
+    ]
+  },
+  {
+    "gid": "1426359048",
+    "status": 200,
+    "usable": true,
+    "headerRow": 1,
+    "nameCol": 1,
+    "tierCol": 9,
+    "rows": 60,
+    "tiers": {
+      "S": 3,
+      "A": 9,
+      "B": 19,
+      "C": 15,
+      "D": 8,
+      "F": 6
+    },
+    "sample": [
+      "Controlled Demolition=S",
+      "Weavewalk=S",
+      "Tempest Strike=S"
+    ]
+  },
+  {
+    "gid": "895871604",
+    "status": 200,
+    "usable": false,
+    "firstCells": "|INFO||||"
+  },
+  {
+    "gid": "1741064497",
+    "status": 200,
+    "usable": false,
+    "firstCells": "INFO|||FACTORS||"
+  }
+]

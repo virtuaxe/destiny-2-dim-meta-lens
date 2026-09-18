@@ -1,0 +1,401 @@
+/*
+ * DIM light.gg Popularity Rank - badge styles
+ *
+ * DIM's `.item` tiles are already positioned containers, so an absolutely
+ * positioned child centres on the tile without changing DIM's layout.
+ *
+ * The badge stacks two numbers: the primary (larger, tier-coloured) and the
+ * secondary (smaller, dimmer, separated by a hairline). Which one is overall vs
+ * category rank is controlled by PRIMARY in content.js.
+ *
+ * pointer-events: none is important -- DIM relies on click and drag on the tile
+ * to move items between characters, and the badge must never intercept that.
+ */
+
+.item .lgg-rank {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 4;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  min-width: 22px;
+  padding: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  font-family: 'Neue Haas Grotesk Display', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+
+  background: rgba(0, 0, 0, 0.66);
+  border-radius: 3px;
+  /* Keeps the digits readable over bright weapon icons without hiding the icon. */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+.item .lgg-rank__line {
+  display: block;
+  padding: 0 3px;
+}
+
+.item .lgg-rank__primary {
+  font-size: 13px;
+  line-height: 14px;
+}
+
+.item .lgg-rank__secondary {
+  font-size: 9px;
+  line-height: 11px;
+  font-weight: 600;
+  color: #cfcfcf;
+  opacity: 0.9;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+/*
+ * A missing rank keeps its line as a dash so the two positions always mean the
+ * same thing. Without this, a category-only weapon renders one big number that
+ * reads as an overall rank.
+ */
+/*
+ * Specificity note: the per-tier colour rules below are (0,3,1)
+ * (.item .lgg-rank--t4 .lgg-rank__primary) and appear later in this file, so a
+ * (0,3,1) rule here would lose on source order. The doubled class on
+ * .lgg-rank__line takes this to (0,4,1) and wins without needing !important.
+ */
+.item .lgg-rank .lgg-rank__line.lgg-rank__line--empty {
+  color: #8a8f96;
+  font-weight: 600;
+}
+
+/* Single-rank mode (SHOW != 'both') gets the whole chip. */
+.item .lgg-rank--single .lgg-rank__primary {
+  font-size: 13px;
+  line-height: 15px;
+}
+
+/*
+ * Untracked exotic. light.gg assigns no popularity rank to fixed-perk exotics,
+ * so "EX" in Destiny's exotic gold says "this is an exotic, intentionally not
+ * ranked" rather than leaving a blank tile that reads as a bug.
+ */
+.item .lgg-rank--exotic {
+  background: rgba(20, 16, 4, 0.82);
+  box-shadow: inset 0 0 0 1px rgba(206, 174, 51, 0.85);
+}
+
+.item .lgg-rank--exotic .lgg-rank__primary {
+  font-size: 10px;
+  line-height: 14px;
+  letter-spacing: 0.04em;
+  color: #ceae33; /* Destiny exotic yellow */
+}
+
+/*
+ * Width/size by digit count. The overall list runs past 1600 entries, so 4-digit
+ * ranks are common; they get a wider box and a smaller face so the number still
+ * fits inside a ~50px tile without covering the icon.
+ */
+.item .lgg-rank--d3 {
+  min-width: 27px;
+}
+
+.item .lgg-rank--d3 .lgg-rank__primary {
+  font-size: 12px;
+}
+
+.item .lgg-rank--d4 {
+  min-width: 33px;
+}
+
+.item .lgg-rank--d4 .lgg-rank__primary {
+  font-size: 11px;
+  letter-spacing: -0.03em;
+}
+
+.item .lgg-rank--d4 .lgg-rank__secondary {
+  font-size: 9px;
+}
+
+/*
+ * Tier colouring, applied to the primary line only so the secondary stays
+ * visually subordinate. Driven by category rank when known: top 5, top 15,
+ * top 40, then everything else.
+ */
+.item .lgg-rank--t1 .lgg-rank__primary {
+  color: #ffd866;
+}
+
+.item .lgg-rank--t2 .lgg-rank__primary {
+  color: #7bd88f;
+}
+
+.item .lgg-rank--t3 .lgg-rank__primary {
+  color: #79c0ff;
+}
+
+.item .lgg-rank--t4 .lgg-rank__primary {
+  color: #e4e4e4;
+}
+
+.item .lgg-rank--t1 {
+  box-shadow: inset 0 0 0 1px rgba(255, 216, 102, 0.7);
+}
+
+.item .lgg-rank--t2 {
+  box-shadow: inset 0 0 0 1px rgba(123, 216, 143, 0.55);
+}
+
+.item .lgg-rank--t3 {
+  box-shadow: inset 0 0 0 1px rgba(121, 192, 255, 0.45);
+}
+
+.item .lgg-rank--t4 {
+  box-shadow: inset 0 0 0 1px rgba(215, 215, 215, 0.3);
+}
+
+/* Smaller tiles (denser inventory settings) get a compact badge so the numbers
+   don't cover the whole icon. */
+@media (max-width: 900px) {
+  .item .lgg-rank {
+    min-width: 19px;
+  }
+
+  .item .lgg-rank__primary {
+    font-size: 11px;
+    line-height: 12px;
+  }
+
+  .item .lgg-rank__secondary {
+    font-size: 8px;
+    line-height: 9px;
+  }
+
+  .item .lgg-rank--d3 {
+    min-width: 23px;
+  }
+
+  .item .lgg-rank--d3 .lgg-rank__primary {
+    font-size: 10px;
+  }
+
+  .item .lgg-rank--d4 {
+    min-width: 28px;
+  }
+
+  .item .lgg-rank--d4 .lgg-rank__primary {
+    font-size: 9px;
+  }
+}
+
+/*
+ * Endgame Analysis tier grade, bottom-left of the tile.
+ *
+ * Deliberately a separate chip from the centre rank badge: popularity (light.gg)
+ * and endgame quality (Endgame Analysis) are different claims from different
+ * sources, and they frequently disagree. Merging them would imply otherwise.
+ */
+.item .lgg-tier {
+  position: absolute;
+  /* Top-centre, along the top edge. This clears DIM's own corner icons -- the
+     wishlist star (top-left) and tag (top-right) -- which the previous
+     bottom-left placement was covering. The popularity badge sits at the tile's
+     vertical middle, so the top edge stays free for the tier chip. */
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+
+  min-width: 13px;
+  padding: 0 3px;
+  box-sizing: border-box;
+
+  font-family: 'Neue Haas Grotesk Display', Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 13px;
+  text-align: center;
+  letter-spacing: 0.02em;
+
+  color: #fff;
+  background: rgba(0, 0, 0, 0.8);
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.95);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Grade colours: S/A good, B/C middling, D/E/F poor. */
+.item .lgg-tier--s {
+  color: #ffd866;
+  box-shadow: inset 0 2px 0 #ffd866;
+}
+
+.item .lgg-tier--a {
+  color: #7bd88f;
+  box-shadow: inset 0 2px 0 #7bd88f;
+}
+
+.item .lgg-tier--b {
+  color: #79c0ff;
+  box-shadow: inset 0 2px 0 #79c0ff;
+}
+
+.item .lgg-tier--c {
+  color: #cfd3d8;
+  box-shadow: inset 0 2px 0 rgba(207, 211, 216, 0.7);
+}
+
+/* D and E are the genuinely negligible-in-PvE end of the scale. */
+.item .lgg-tier--d {
+  color: #ffa657;
+  box-shadow: inset 0 2px 0 rgba(255, 166, 87, 0.8);
+}
+
+.item .lgg-tier--e {
+  color: #ff7b72;
+  box-shadow: inset 0 2px 0 rgba(255, 123, 114, 0.85);
+}
+
+/*
+ * F is "exclusively PvP effects" -- NOT the bottom of a quality ladder. An F
+ * weapon can be excellent in Crucible, so it gets its own violet identity rather
+ * than the red used for weak-in-PvE grades. Ace of Spades grades F.
+ */
+.item .lgg-tier--f,
+.item .lgg-tier--offaxis {
+  color: #d2a8ff;
+  box-shadow: inset 0 2px 0 rgba(210, 168, 255, 0.85);
+}
+
+@media (max-width: 900px) {
+  .item .lgg-tier {
+    min-width: 11px;
+    font-size: 9px;
+    line-height: 11px;
+  }
+}
+
+/* ==========================================================================
+   Armor set-bonus grades
+   ==========================================================================
+ * A set is graded separately at 2 and 4 pieces, and the grades often differ a
+ * lot. Each is drawn with its piece requirement ("S4", "C2") so the grade never
+ * reads as unconditional. DIM draws very little on armor tiles, so the centre
+ * and the bottom-left corner are both free:
+ *   centre      -> the higher piece requirement (usually the 4-piece bonus)
+ *   bottom-left -> the lower one (usually the 2-piece bonus)
+ */
+
+.item .lgg-armor {
+  position: absolute;
+  z-index: 5;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1px;
+
+  padding: 0 3px;
+  box-sizing: border-box;
+
+  font-family: 'Neue Haas Grotesk Display', Helvetica, Arial, sans-serif;
+  font-weight: 800;
+  line-height: 14px;
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums;
+
+  color: #fff;
+  background: rgba(0, 0, 0, 0.78);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.95);
+
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Headline grade, centre of the tile. */
+.item .lgg-armor--center {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 15px;
+}
+
+/* Secondary grade, bottom-left corner. */
+.item .lgg-armor--corner {
+  bottom: 0;
+  left: 0;
+  border-top-right-radius: 3px;
+  font-size: 10px;
+  line-height: 13px;
+  opacity: 0.95;
+}
+
+/* The piece requirement rides as a smaller suffix: S⁴ reads as "S at 4 pieces". */
+.item .lgg-armor__pcs {
+  font-size: 0.7em;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+/* Grade colours, matching the weapon tier scale. */
+.item .lgg-armor--s {
+  color: #ffd866;
+  box-shadow: inset 0 0 0 1px rgba(255, 216, 102, 0.75);
+}
+
+.item .lgg-armor--a {
+  color: #7bd88f;
+  box-shadow: inset 0 0 0 1px rgba(123, 216, 143, 0.6);
+}
+
+.item .lgg-armor--b {
+  color: #79c0ff;
+  box-shadow: inset 0 0 0 1px rgba(121, 192, 255, 0.5);
+}
+
+.item .lgg-armor--c {
+  color: #cfd3d8;
+  box-shadow: inset 0 0 0 1px rgba(207, 211, 216, 0.4);
+}
+
+.item .lgg-armor--d {
+  color: #ffa657;
+  box-shadow: inset 0 0 0 1px rgba(255, 166, 87, 0.5);
+}
+
+.item .lgg-armor--e {
+  color: #ff7b72;
+  box-shadow: inset 0 0 0 1px rgba(255, 123, 114, 0.5);
+}
+
+/* F is "PvP only", not the worst grade -- violet, never the red of weak grades. */
+.item .lgg-armor--f,
+.item .lgg-armor--offaxis {
+  color: #d2a8ff;
+  box-shadow: inset 0 0 0 1px rgba(210, 168, 255, 0.55);
+}
+
+@media (max-width: 900px) {
+  .item .lgg-armor--center {
+    font-size: 11px;
+    line-height: 13px;
+  }
+
+  .item .lgg-armor--corner {
+    font-size: 9px;
+    line-height: 11px;
+  }
+}

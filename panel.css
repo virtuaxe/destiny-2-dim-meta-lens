@@ -1,0 +1,1157 @@
+/*
+ * DIM light.gg Popularity Rank - filter panel + inventory filter states
+ *
+ * Two concerns:
+ *   1. The filter effect applied to DIM's own tiles (.lggf-out / .lggf-in).
+ *   2. The panel and launcher chrome.
+ *
+ * Content script CSS shares the page with DIM's stylesheet, so every selector is
+ * either prefixed .lggf- or scoped under one, and the panel resets the
+ * properties DIM sets globally (box-sizing, font, colour) rather than assuming.
+ */
+
+/* ==========================================================================
+   1. Inventory filter states
+   ========================================================================== */
+
+/*
+ * Non-matches fade instead of disappearing. Layout never shifts, so DIM's
+ * drag-and-drop targets stay where the user expects them.
+ */
+html.lggf-active .item-drag-container.lggf-out,
+html.lggf-active .equipped-item .lggf-out {
+  opacity: 0.16;
+  filter: grayscale(1);
+  transition: opacity 120ms ease-out, filter 120ms ease-out;
+}
+
+/* Opt-in stronger mode: collapse non-matches out of the grid entirely. */
+html.lggf-active.lggf-hide .item-drag-container.lggf-out {
+  display: none;
+}
+
+/* Matches get a ring so the eye lands on them without re-reading every icon. */
+html.lggf-active .item.lggf-in {
+  outline: 2px solid #ffd866;
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+/* Flash used when a result row is clicked. */
+@keyframes lggf-flash {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 216, 102, 0);
+  }
+  15% {
+    box-shadow: 0 0 0 4px rgba(255, 216, 102, 0.95);
+  }
+  60% {
+    box-shadow: 0 0 0 3px rgba(255, 216, 102, 0.45);
+  }
+}
+
+.item.lggf-flash {
+  animation: lggf-flash 1.5s ease-out;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.lggf-active .item-drag-container.lggf-out,
+  html.lggf-active .equipped-item .lggf-out {
+    transition: none;
+  }
+
+  .item.lggf-flash {
+    animation: none;
+    outline: 3px solid #ffd866;
+  }
+}
+
+/* ==========================================================================
+   2. Launcher
+   ========================================================================== */
+
+.lggf-launcher,
+.lggf-panel {
+  /* DIM sits around z-index 1000 for popups; stay above but below its modals. */
+  z-index: 9000;
+  font-family: 'Neue Haas Grotesk Display', Helvetica, Arial, sans-serif;
+  box-sizing: border-box;
+  color: #e8e8e8;
+}
+
+.lggf-launcher *,
+.lggf-panel * {
+  box-sizing: border-box;
+}
+
+.lggf-launcher {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  margin: 0;
+  padding: 7px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+
+  background: rgba(18, 20, 24, 0.94);
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
+
+.lggf-launcher:hover {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(26, 29, 34, 0.97);
+}
+
+.lggf-launcher:focus-visible,
+.lggf-panel :focus-visible {
+  outline: 2px solid #ffd866;
+  outline-offset: 2px;
+}
+
+.lggf-launcher__mark {
+  display: inline-grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 800;
+  color: #14161a;
+  background: #ffd866;
+}
+
+/* Filled state: a filter is currently narrowing the inventory. */
+.lggf-launcher--on {
+  border-color: rgba(255, 216, 102, 0.75);
+  color: #ffd866;
+}
+
+/* ==========================================================================
+   3. Panel
+   ========================================================================== */
+
+.lggf-panel {
+  position: fixed;
+  right: 14px;
+  bottom: 58px;
+
+  display: flex;
+  flex-direction: column;
+  width: 316px;
+  /* Fit between the top of the viewport and the launcher (bottom: 58px + a
+     margin), capped so it doesn't get unwieldy on tall screens. The inner
+     scroll regions handle any content taller than this. */
+  max-height: min(720px, calc(100vh - 72px));
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  background: rgba(16, 18, 22, 0.98);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.62);
+
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.lggf-panel[hidden] {
+  display: none;
+}
+
+.lggf-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lggf-title {
+  flex: 1;
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #ffd866;
+}
+
+.lggf-reset,
+.lggf-close {
+  margin: 0;
+  padding: 3px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 11px;
+  color: #d8d8d8;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+.lggf-close {
+  padding: 3px 8px;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.lggf-reset:hover,
+.lggf-close:hover {
+  border-color: rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Scan-all button: force DIM to render the whole inventory. */
+.lggf-scan {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  padding: 3px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 11px;
+  color: #d8d8d8;
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
+.lggf-scan:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lggf-scan:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+/* Spin the sync icon while a scan is running. */
+.lggf-scanning .lggf-scan .app-icon {
+  animation: lggf-spin 0.8s linear infinite;
+}
+
+@keyframes lggf-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lggf-scanning .lggf-scan .app-icon {
+    animation: none;
+  }
+}
+
+/* Thin progress bar under the header, visible only mid-scan. */
+.lggf-scanbar {
+  height: 2px;
+  background: transparent;
+}
+
+.lggf-scanning .lggf-scanbar {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lggf-scanbar__fill {
+  height: 100%;
+  width: 0;
+  background: #ffd866;
+  transition: width 120ms linear;
+}
+
+.lggf-panel:not(.lggf-scanning) .lggf-scanbar__fill {
+  width: 0;
+}
+
+/* --- form ---------------------------------------------------------------- */
+
+.lggf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin: 0;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  /*
+   * Filters get priority. The form sizes to its content, but is capped so a very
+   * long field list scrolls internally instead of pushing the results and tag
+   * button off screen. The cap is in viewport units, which resolve reliably --
+   * unlike a percentage of this flex parent, whose content-based height flexbox
+   * reports as auto (that is why an earlier max-height:% silently did nothing,
+   * and why flex-basis:0 collapsed the panel: there was no fixed height to
+   * divide).
+   */
+  flex: 0 1 auto;
+  min-height: 0;
+  max-height: calc(100vh - 320px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.lggf-field {
+  display: grid;
+  grid-template-columns: 74px 1fr;
+  align-items: center;
+  gap: 4px 8px;
+}
+
+.lggf-field__label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: #9aa0a8;
+  /* Keep multi-syllable labels like POPULARITY on one line; the column is sized
+     to fit the longest label rather than wrapping it. Overflow is clipped as a
+     last resort so a slightly-too-long label degrades to a truncation, never a
+     wrapped single letter on its own line. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lggf-field__hint {
+  grid-column: 2;
+  font-size: 10px;
+  color: #7e858d;
+}
+
+/* --- collapsible fields -------------------------------------------------- */
+
+/* The label cell becomes a full-width toggle button spanning both columns. */
+.lggf-field--collapsible {
+  grid-template-columns: 1fr;
+}
+
+.lggf-field__toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.lggf-field__toggle .lggf-field__label {
+  cursor: pointer;
+}
+
+.lggf-field__caret {
+  flex: 0 0 auto;
+  width: 8px;
+  color: #9aa0a8;
+  transition: transform 120ms ease;
+}
+
+.lggf-field__caret::before {
+  content: '\25be'; /* down triangle = expanded */
+}
+
+.lggf-field--collapsed .lggf-field__caret {
+  transform: rotate(-90deg); /* points right = collapsed */
+}
+
+.lggf-field__toggle:hover .lggf-field__label,
+.lggf-field__toggle:hover .lggf-field__caret {
+  color: #ffd866;
+}
+
+.lggf-field__toggle:focus-visible {
+  outline: 2px solid #ffd866;
+  outline-offset: 2px;
+}
+
+/* Current-selection summary, shown only when collapsed. */
+.lggf-field__summary {
+  margin-left: auto;
+  padding-left: 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #cfd3d8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55%;
+}
+
+/* Hide the control itself when the field is collapsed. */
+.lggf-field--collapsed > .lggf-seg,
+.lggf-field--collapsed > .lggf-armorclass-mount,
+.lggf-field--collapsed > .lggf-armorslot-mount,
+.lggf-field--collapsed > .lggf-slot-mount,
+.lggf-field--collapsed > [class$='-mount'],
+.lggf-field--collapsed > select,
+.lggf-field--collapsed > .lggf-field__hint {
+  display: none;
+}
+
+/* Shared field styling for the text input and the selects. */
+.lggf-input,
+.lggf-select {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 5px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  color: #eee;
+  background-color: rgba(0, 0, 0, 0.45);
+}
+
+/*
+ * Selects only: draw our own chevron. DIM's global stylesheet resets native
+ * select styling across the page, which swallowed the OS arrow and left the
+ * control looking like a plain text field. Suppressing the native appearance and
+ * painting an inline-SVG chevron makes the affordance consistent regardless of
+ * DIM's CSS, the OS, or the browser. This must NOT apply to the search input --
+ * that was giving the "Armor or set name" box a spurious dropdown arrow.
+ */
+.lggf-select {
+  cursor: pointer;
+  /* Extra right padding leaves room for the chevron. */
+  padding-right: 26px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%23cfd3d8' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2.5 4.5 6 8l3.5-3.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 11px 11px;
+}
+
+.lggf-select:hover {
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+/* Chevron flips up when the menu is open (via :focus as a proxy). */
+.lggf-select:focus {
+  border-color: #ffd866;
+}
+
+.lggf-input::placeholder {
+  color: #7e858d;
+}
+
+/* The search box is a plain text field: no chevron, no reserved right padding,
+   and none of the browser's native search decorations. */
+.lggf-input {
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: none;
+}
+
+.lggf-input::-webkit-search-decoration,
+.lggf-input::-webkit-search-results-button,
+.lggf-input::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.lggf-select--sm {
+  width: auto;
+  padding: 3px 22px 3px 5px;
+  font-size: 11px;
+  background-position: right 6px center;
+  background-size: 10px 10px;
+}
+
+/* --- segmented controls -------------------------------------------------- */
+
+.lggf-seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+/* The radio itself is visually hidden but still focusable and announced. */
+.lggf-seg__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.lggf-seg__label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 4px;
+  font-size: 11px;
+  color: #cfd3d8;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  user-select: none;
+}
+
+.lggf-seg__label:hover {
+  border-color: rgba(255, 255, 255, 0.34);
+}
+
+/* Breaker icon inside a segmented option. */
+.lggf-seg__icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+
+/* Match count inside a segmented option, e.g. the "12" in "Top 5 12". */
+.lggf-seg__count {
+  margin-left: 4px;
+  padding: 0 3px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #b9bfc6;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lggf-seg__input:checked + .lggf-seg__label .lggf-seg__count {
+  color: #14161a;
+  background: rgba(20, 22, 26, 0.22);
+}
+
+.lggf-seg__input:checked + .lggf-seg__label {
+  color: #14161a;
+  font-weight: 700;
+  border-color: #ffd866;
+  background: #ffd866;
+}
+
+.lggf-seg__input:focus-visible + .lggf-seg__label {
+  outline: 2px solid #ffd866;
+  outline-offset: 2px;
+}
+
+.lggf-seg__input:disabled + .lggf-seg__label {
+  opacity: 0.34;
+  cursor: not-allowed;
+}
+
+/* --- checkboxes ---------------------------------------------------------- */
+
+.lggf-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.lggf-checkrow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lggf-check {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  accent-color: #ffd866;
+  cursor: pointer;
+}
+
+.lggf-checklabel {
+  font-size: 11px;
+  color: #cfd3d8;
+  cursor: pointer;
+}
+
+/* --- bulk tag action ----------------------------------------------------- */
+
+.lggf-tagrow {
+  padding: 0 10px 8px;
+}
+
+.lggf-tagrow[hidden] {
+  display: none;
+}
+
+.lggf-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  justify-content: center;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 216, 102, 0.5);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffd866;
+  background: rgba(255, 216, 102, 0.1);
+  cursor: pointer;
+}
+
+.lggf-tag:hover {
+  background: rgba(255, 216, 102, 0.18);
+  border-color: rgba(255, 216, 102, 0.8);
+}
+
+/* Confirmation sheet, overlaid inside the panel. */
+.lggf-tagsheet {
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
+  z-index: 3;
+
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  background: rgba(22, 24, 28, 0.99);
+  box-shadow: 0 -6px 30px rgba(0, 0, 0, 0.6);
+}
+
+.lggf-tagsheet__head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 13px;
+  color: #f0f0f0;
+}
+
+.lggf-tagsheet__sub {
+  font-size: 10px;
+  color: #9aa0a8;
+}
+
+.lggf-tagsheet__note {
+  margin: 8px 0 10px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #9aa0a8;
+}
+
+.lggf-tagsheet__opts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.lggf-tagopt {
+  flex: 1 0 auto;
+  margin: 0;
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  color: #e8e8e8;
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.lggf-tagopt:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.13);
+}
+
+/* Junk is the destructive-feeling one, so tint it red. */
+.lggf-tagopt--junk {
+  color: #ff8a8a;
+  border-color: rgba(255, 107, 107, 0.5);
+  background: rgba(255, 107, 107, 0.12);
+}
+
+.lggf-tagopt--junk:hover {
+  border-color: rgba(255, 107, 107, 0.85);
+  background: rgba(255, 107, 107, 0.2);
+}
+
+.lggf-tagsheet__cancel {
+  width: 100%;
+  margin: 0;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  font: inherit;
+  font-size: 12px;
+  color: #cfd3d8;
+  background: transparent;
+  cursor: pointer;
+}
+
+.lggf-tagsheet__cancel:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lggf-tagprog {
+  height: 5px;
+  margin: 6px 0;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.lggf-tagprog__fill {
+  height: 100%;
+  width: 0;
+  background: #ffd866;
+  transition: width 100ms linear;
+}
+
+/* --- results ------------------------------------------------------------- */
+
+.lggf-resultshead {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 10px;
+  flex: 0 0 auto; /* fixed row between the scrolling form and results */
+}
+
+/*
+ * Fixed panel regions: they keep their natural height and never shrink, so the
+ * two scroll areas (the form and the results list) absorb any overflow instead.
+ */
+.lggf-head,
+.lggf-tabs,
+.lggf-scanbar,
+.lggf-tagrow,
+.lggf-credit {
+  flex: 0 0 auto;
+}
+
+.lggf-count {
+  flex: 1;
+  font-size: 11px;
+  font-weight: 700;
+  color: #b9bfc6;
+}
+
+.lggf-sortlabel {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9aa0a8;
+}
+
+.lggf-results {
+  /*
+   * The list is a compact preview: filters matter more. It is capped to a small
+   * fixed height (about 4-5 rows) and scrolls within that, and does NOT grow to
+   * fill leftover space -- that space stays with the form above. A fixed cap in
+   * rem, rather than a % of the flex parent, is what makes this actually hold.
+   */
+  flex: 0 0 auto;
+  max-height: 11rem;
+  margin: 0;
+  padding: 0 6px 8px;
+  overflow-y: auto;
+  list-style: none;
+  overscroll-behavior: contain;
+}
+
+.lggf-result {
+  margin: 0 0 2px;
+}
+
+.lggf-result__btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 5px 6px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font: inherit;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.lggf-result__btn:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.lggf-chip {
+  flex: 0 0 auto;
+  min-width: 52px;
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+  color: #cfd3d8;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lggf-chip--cat {
+  color: #ffd866;
+  background: rgba(255, 216, 102, 0.14);
+}
+
+.lggf-chip--none {
+  font-size: 9px;
+  font-style: italic;
+  color: #7e858d;
+}
+
+.lggf-chip__total {
+  font-size: 9px;
+  opacity: 0.7;
+}
+
+.lggf-result__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.lggf-result__nameline {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  min-width: 0;
+}
+
+.lggf-result__name {
+  flex: 0 1 auto;
+  font-size: 12px;
+  font-weight: 600;
+  color: #f0f0f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Duplicate-copy count, e.g. a vault holding five of the same weapon. */
+.lggf-result__count {
+  flex: 0 0 auto;
+  padding: 0 3px;
+  border-radius: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #b9bfc6;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lggf-result__meta {
+  font-size: 10px;
+  color: #8d949c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lggf-result__power {
+  flex: 0 0 auto;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: #b9bfc6;
+}
+
+.lggf-empty {
+  padding: 14px 8px;
+  text-align: center;
+  color: #9aa0a8;
+}
+
+.lggf-empty p {
+  margin: 0 0 4px;
+}
+
+.lggf-empty__hint {
+  font-size: 10px;
+  color: #7e858d;
+}
+
+.lggf-more {
+  padding: 6px 8px;
+  font-size: 10px;
+  text-align: center;
+  color: #7e858d;
+}
+
+/* Narrow windows: let the panel use the full width rather than overflow. */
+@media (max-width: 420px) {
+  .lggf-panel {
+    right: 8px;
+    left: 8px;
+    width: auto;
+  }
+}
+
+/* --- endgame tier pill in result rows ------------------------------------ */
+
+.lggf-tierpill {
+  flex: 0 0 auto;
+  min-width: 17px;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lggf-tierpill--s {
+  color: #14161a;
+  background: #ffd866;
+}
+
+.lggf-tierpill--a {
+  color: #14161a;
+  background: #7bd88f;
+}
+
+.lggf-tierpill--b {
+  color: #14161a;
+  background: #79c0ff;
+}
+
+.lggf-tierpill--c {
+  color: #14161a;
+  background: #cfd3d8;
+}
+
+.lggf-tierpill--d {
+  color: #14161a;
+  background: #ffa657;
+}
+
+.lggf-tierpill--e {
+  color: #fff;
+  background: #b3413b;
+}
+
+/* F is "PvP only", not "worst" -- distinct violet, never the red of weak grades. */
+.lggf-tierpill--f {
+  color: #14161a;
+  background: #d2a8ff;
+}
+
+/* --- attribution --------------------------------------------------------- */
+
+.lggf-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 10px 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 9px;
+  color: #7e858d;
+}
+
+.lggf-credit__row {
+  line-height: 1.4;
+}
+
+.lggf-credit__label {
+  color: #6b7178;
+}
+
+.lggf-credit__by {
+  color: #6b7178;
+}
+
+.lggf-credit__link {
+  color: #9aa0a8;
+  text-decoration: underline;
+}
+
+.lggf-credit__link:hover,
+.lggf-credit__link:focus-visible {
+  color: #ffd866;
+}
+
+/* --- tier legend --------------------------------------------------------- */
+
+.lggf-legend {
+  margin: -4px 0 0;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.lggf-legend__summary {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #9aa0a8;
+  cursor: pointer;
+  list-style: none;
+}
+
+.lggf-legend__summary::-webkit-details-marker {
+  display: none;
+}
+
+.lggf-legend__summary::before {
+  content: '\25b8';
+  display: inline-block;
+  margin-right: 5px;
+  transition: transform 120ms ease;
+}
+
+.lggf-legend[open] .lggf-legend__summary::before {
+  transform: rotate(90deg);
+}
+
+.lggf-legend__summary:hover {
+  color: #ffd866;
+}
+
+.lggf-legend__intro {
+  margin: 7px 0 6px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #8d949c;
+}
+
+.lggf-legend__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.lggf-legend__row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.lggf-legend__text {
+  flex: 1;
+  font-size: 10px;
+  line-height: 1.35;
+  color: #cfd3d8;
+}
+
+/* Callout on grades that are not a PvE quality judgement (F = PvP only). */
+.lggf-legend__flag {
+  flex: 0 0 auto;
+  align-self: center;
+  padding: 1px 4px;
+  border: 1px solid rgba(210, 168, 255, 0.5);
+  border-radius: 3px;
+  font-size: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+  color: #d2a8ff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lggf-legend__summary::before {
+    transition: none;
+  }
+}
+
+/* ==========================================================================
+   Weapons | Armor tabs
+   ========================================================================== */
+
+.lggf-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 8px 10px 0;
+}
+
+.lggf-tab {
+  flex: 1;
+  margin: 0;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #9aa0a8;
+  background: rgba(255, 255, 255, 0.03);
+  cursor: pointer;
+}
+
+.lggf-tab:hover {
+  color: #d8d8d8;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lggf-tab[aria-selected='true'] {
+  color: #14161a;
+  border-color: #ffd866;
+  background: #ffd866;
+}
+
+.lggf-tab:focus-visible {
+  outline: 2px solid #ffd866;
+  outline-offset: 2px;
+}
+
+/* Field group shown/hidden by the active tab. */
+.lggf-group {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.lggf-group[hidden] {
+  display: none;
+}
+
+/* ==========================================================================
+   Armor set grades in result rows
+   ========================================================================== */
+
+.lggf-grades {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 34px;
+}
+
+/* The piece requirement rides as a small suffix on the grade pill: S then 4. */
+.lggf-pcs {
+  margin-left: 1px;
+  font-size: 0.7em;
+  font-weight: 700;
+  opacity: 0.8;
+}
